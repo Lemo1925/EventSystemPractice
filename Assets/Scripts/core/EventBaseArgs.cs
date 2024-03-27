@@ -4,7 +4,7 @@ namespace EventSystem
 {
     // 事件单元
     public interface IEventCell {
-        public string Name { get; set; }
+        public string Index { get; set; }
     }
 
     public class EventManager 
@@ -32,7 +32,7 @@ namespace EventSystem
         public static void Tick(IEventCell @event) 
         {
             // 驱动事件方法
-            if (channel.TryGetValue(@event.Name, out EventAction action))
+            if (channel.TryGetValue(@event.Index, out EventAction action))
                 action?.Invoke(@event);
         }
     }

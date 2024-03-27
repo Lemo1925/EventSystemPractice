@@ -7,10 +7,10 @@ namespace GameObjectPool
     public class ObjectPool : MonoBehaviour
     {
         // 传递需要放入池中的对象
-        [SerializeField] List<GameObject> gameObjects;
+        public List<GameObject> Items { get; set; } = new List<GameObject>();
 
-        const int Capacity = 10;
-        private Dictionary<string, Queue<GameObject>> ObjectDic = new Dictionary<string, Queue<GameObject>>(Capacity);
+        const int Capacity = 18;
+        public Dictionary<string, Queue<GameObject>> ObjectDic = new Dictionary<string, Queue<GameObject>>(Capacity);
         public static ObjectPool Instance;
 
         public void Awake()
@@ -19,13 +19,12 @@ namespace GameObjectPool
             InitPool();
         }
         
-        private void InitPool()
+        public void InitPool()
         {
-            foreach (var go in gameObjects)
+            foreach (var go in Items)
             {
                 // 初始化对象池字典，以及Hierarchy
                 ObjectDic[go.name] = new Queue<GameObject>();
-
                 var root = new GameObject(string.Format("{0}Pool", go.name));
                 root.transform.SetParent(transform);
 
@@ -51,9 +50,8 @@ namespace GameObjectPool
                     ObjectDic[name].Enqueue(obj);
                 }
             }
-            //ObjectDic[name].Enqueue(ObjectDic[name].Dequeue()); // ??? 
             GameObject gameObject = ObjectDic[name].Dequeue();
-            gameObject.SetActive(enabled);
+            gameObject.SetActive(true);
             return gameObject;
         }
         

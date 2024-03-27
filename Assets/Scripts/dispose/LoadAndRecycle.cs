@@ -1,27 +1,27 @@
 using EventSystem;
 using GameObjectPool;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
+[Obsolete("LoadAndRecycle is Disposed")]
 public class LoadAndRecycle : MonoBehaviour
 {
+    /// <summary>
+    /// 该类型已弃用
+    /// </summary>
     Button[] buttons;
     Dictionary<string, Stack<GameObject>> goDic = new Dictionary<string, Stack<GameObject>>();
 
     class PoolEvent : IEventCell
     {
-        public string Name { get; set; }
-        public PoolEvent(string name)
-        {
-            Name = name;
-        }
+        public string Index { get; set; }
+        public PoolEvent(string name) => Index = name;
     }
 
-    private void Awake()
-    {
-        buttons = transform.GetComponentsInChildren<Button>();
-    }
+    private void Awake() => buttons = transform.GetComponentsInChildren<Button>();
 
     void Start()
     {
@@ -34,8 +34,8 @@ public class LoadAndRecycle : MonoBehaviour
 
     public void OnBtnClick(IEventCell @event)
     {
-        string type = @event.Name.Split('-')[0];
-        string name = @event.Name.Split('-')[1];
+        string type = @event.Index.Split('-')[0];
+        string name = @event.Index.Split('-')[1];
         
         if (type == "Load")
         {

@@ -9,19 +9,6 @@ public class Calculator : MonoBehaviour
 {
     Button[] buttons = new Button[16];
     Text display; object ans = null;
-    private class CalEventCell : IEventCell
-    {
-        public Button button;
-        public string Name { get; set; }
-
-        public CalEventCell(string name, Button button)
-        {
-            Name = name;
-            this.button = button;
-        }
-
-        public string GetText() => button.GetComponentInChildren<Text>().text;
-    }
 
     private void Awake()
     {
@@ -33,15 +20,15 @@ public class Calculator : MonoBehaviour
     {
         foreach (var button in buttons)
         {
-            CalEventCell gameEvent = new CalEventCell(button.name, button);
+            CalculatorButton evnetBtn = new CalculatorButton(button.name, button);
             EventManager.AddListener(button.name, MyButtonClick);
-            button.onClick.AddListener(() => EventManager.Tick(gameEvent));
+            button.onClick.AddListener(() => EventManager.Tick(evnetBtn));
         }
     }
    
     public void MyButtonClick(IEventCell BtnCell)
     {
-        string inputContent = ((CalEventCell)BtnCell).GetText();
+        string inputContent = ((CalculatorButton)BtnCell).Text;
         switch (inputContent)
         {
             case "Reset":
@@ -50,7 +37,7 @@ public class Calculator : MonoBehaviour
                 break;
             case "=":
                 ans = IsFormular(display.text) ?
-                    Eval(display.text) : "Illegal formula"; // 分析计算表达式得出结果
+                    Eval(display.text) : "illegal formula"; // 分析计算表达式得出结果
                 display.text = ans.ToString();
                 break;
             default:
